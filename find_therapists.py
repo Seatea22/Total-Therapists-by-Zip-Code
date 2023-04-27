@@ -25,23 +25,17 @@ def main():
     #headers
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-    # send a get request to the search results page with the query parameters
-    response = requests.get(base_url + '/us/therapists', params=search_params, headers=headers)
-    print("Response status code: ", response.status_code)
-
-    # parse the HTML content of the response using BeautifulSoup
-    soup = BeautifulSoup(response.content, 'html.parser')
     #print("Soup: ", soup)
 
     # define a dictionary to store the profile locations and their corresponding counts
     profile_locations = {}
-    date = datetime.now()
-    dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
     
     clear('win')
 
     # iterate through all the search result pages
     page = 1
+    date = datetime.now()
+    dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
     print("Loading...")
     while(True):
         try:
@@ -86,6 +80,9 @@ def main():
     first_letter = city[0].upper()
     rest_of_city = city[1:].lower()
     city = first_letter + rest_of_city
+
+    # order the dictionary by the count of therapists per location
+    profile_locations = dict(sorted(profile_locations.items(), key=lambda item: item[1], reverse=True))
 
     # print the total results per location
     print("\nAccording to Psychology Today, as of " + dt_string + ":\n")
